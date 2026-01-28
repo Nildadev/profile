@@ -13,9 +13,7 @@ export const USER_PROFILE: UserProfile = {
   bio: "Chuyên gia xây dựng các hệ thống web quy mô lớn và tối ưu hóa workflow bằng AI. Tôi đam mê sự giao thoa giữa code thuần túy và nghệ thuật thị giác số.",
   avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&h=400&auto=format&fit=crop",
   socials: {
-    github: "https://github.com/nilovkhai",
-    linkedin: "https://linkedin.com/in/nilovkhai",
-    email: "nilov.dev@space.com"
+    github: "https://github.com/Nildadev",
   }
 };
 

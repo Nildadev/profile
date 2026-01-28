@@ -106,11 +106,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </div>
           </div>
           <div className="space-y-4 md:space-y-6">
-            <h4 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary">Social</h4>
+            <h4 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary">GitHub</h4>
             <div className="flex flex-col gap-3 md:gap-4 text-xs md:text-sm font-bold text-slate-400">
-              <a href="#" className="hover:text-white transition-colors">GitHub</a>
-              <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-              <a href="#" className="hover:text-white transition-colors">Twitter</a>
+              <a href="https://github.com/Nildadev" target="_blank" className="hover:text-white transition-colors">Nildadev Profile</a>
             </div>
           </div>
         </div>
