@@ -122,16 +122,33 @@ const BlogPostDetail: React.FC = () => {
           <div className="sticky top-32 space-y-10 animate-slide-up" style={{ animationDelay: '200ms' }}>
 
             <div className="p-10 glass rounded-[40px] border-white/5 space-y-8">
-              <h4 className="font-black text-sm uppercase tracking-widest text-slate-900 dark:text-white">Metadata</h4>
-              <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag, idx) => (
-                  <span
-                    key={tag}
-                    className="px-4 py-2 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand-primary hover:border-brand-primary transition-all cursor-pointer"
-                  >
-                    #{tag}
-                  </span>
-                ))}
+              <h4 className="font-black text-sm uppercase tracking-widest text-slate-900 dark:text-white">Thông tin bài viết</h4>
+
+              <div className="space-y-6">
+                <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-widest">
+                  <span className="text-slate-500">Chuyên mục</span>
+                  <span className="text-brand-primary">{post.category}</span>
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-widest pt-4 border-t border-white/5">
+                  <span className="text-slate-500">Ngày đăng</span>
+                  <span className="text-slate-900 dark:text-white">{new Date(post.date).toLocaleDateString('vi-VN', { dateStyle: 'medium' })}</span>
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-widest pt-4 border-t border-white/5">
+                  <span className="text-slate-500">Thẻ bài viết</span>
+                </div>
+
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-4 py-2 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand-primary hover:border-brand-primary transition-all cursor-pointer"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
