@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --transition-speed: 0.6s;
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    /* These colors are likely defined elsewhere in the app or expected to be in CSS variables */
+    /* I'll include the ones used in index.html if they were there, but index.html used var() */
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--color-bg-dark);
+    color: #f1f5f9;
+    transition: background-color var(--transition-speed) var(--ease-in-out);
+    -webkit-font-smoothing: antialiased;
+}
+
+.light body {
+    background-color: var(--color-bg-light);
+    color: #0f172a;
+}
+
+.glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.light .glass {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.bento-card {
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.bento-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.25);
+}
+
+.dark-noise {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  opacity: 0.03;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 10px; }
+
+.blur-fix {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Loading Spinner */
+.sync-loader {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-primary);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
