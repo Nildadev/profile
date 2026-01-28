@@ -1,54 +1,39 @@
-
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export class GeminiService {
-  // Removed global ai instance to follow the recommendation of instantiating right before use
+  private getModel() {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error("VITE_GEMINI_API_KEY is not defined.");
+    }
+    const genAI = new GoogleGenerativeAI(apiKey);
+    return genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  }
 
   async summarizePost(title: string, content: string): Promise<string> {
     try {
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-      if (!apiKey) {
-        console.error("Gemini Error: VITE_GEMINI_API_KEY is not defined in environment variables.");
-        return "Lỗi: Chưa cấu hình API Key cho AI.";
-      }
-
-      // Create a new GoogleGenAI instance right before making an API call to ensure latest API key usage
-      const ai = new GoogleGenAI({ apiKey });
-      const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash', // Using a more stable model name
-        contents: `Hãy tóm tắt bài viết sau đây một cách súc tích và hấp dẫn cho người đọc: 
+      const model = this.getModel();
+      const prompt = `Hãy tóm tắt bài viết sau đây một cách súc tích và hấp dẫn cho người đọc bằng tiếng Việt: 
         Tiêu đề: ${title}
-        Nội dung: ${content}`,
-        config: {
-          temperature: 0.7,
-        }
-      });
-      // Directly access the .text property from GenerateContentResponse
-      return response.text || "Không thể tạo tóm tắt vào lúc này.";
+        Nội dung: ${content}`;
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      return response.text();
     } catch (error: any) {
       console.error("Gemini Detailed Error:", error);
-      if (error?.message) {
-        console.error("Error Message:", error.message);
-      }
       return "Lỗi khi kết nối với AI để tóm tắt bài viết.";
     }
   }
 
   async getInsights(category: string, tags: string[]): Promise<string> {
     try {
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-      if (!apiKey) {
-        return "Sáng tạo là không giới hạn.";
-      }
+      const model = this.getModel();
+      const prompt = `Dựa trên chuyên mục "${category}" và các thẻ từ khóa [${tags.join(', ')}], hãy đưa ra 1 lời khuyên ngắn gọn hoặc xu hướng mới nhất trong lĩnh vực này bằng tiếng Việt.`;
 
-      // Create a new GoogleGenAI instance right before making an API call
-      const ai = new GoogleGenAI({ apiKey });
-      const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
-        contents: `Dựa trên chuyên mục "${category}" và các thẻ từ khóa [${tags.join(', ')}], hãy đưa ra 1 lời khuyên ngắn gọn hoặc xu hướng mới nhất trong lĩnh vực này.`,
-      });
-      // Directly access the .text property from GenerateContentResponse
-      return response.text || "Tiếp tục sáng tạo nhé!";
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      return response.text();
     } catch (error: any) {
       console.error("Gemini Insights Error:", error);
       return "Sáng tạo là không giới hạn.";
