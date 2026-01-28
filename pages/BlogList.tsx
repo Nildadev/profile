@@ -8,19 +8,19 @@ const BlogList: React.FC = () => {
   const { posts } = useApp();
   const [selectedCategory, setSelectedCategory] = useState<Category | 'Tất cả'>('Tất cả');
 
-  const filteredPosts = selectedCategory === 'Tất cả' 
-    ? posts 
+  const filteredPosts = selectedCategory === 'Tất cả'
+    ? posts
     : posts.filter(post => post.category === selectedCategory);
 
   const categories = ['Tất cả', ...Object.values(Category)];
 
   return (
-    <div className="space-y-20 py-12">
-      <div className="space-y-4 text-center max-w-3xl mx-auto">
-        <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-slate-900 dark:text-white">
+    <div className="space-y-12 md:space-y-20 py-8 md:py-12">
+      <div className="space-y-4 text-center max-w-3xl mx-auto px-6">
+        <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-slate-900 dark:text-white">
           Thư viện <span className="text-brand-primary">NilSpace</span>
         </h1>
-        <p className="text-lg text-slate-500 dark:text-slate-400 font-medium italic">
+        <p className="text-base md:text-lg text-slate-500 dark:text-slate-400 font-medium italic">
           Nơi lưu giữ các dự án tâm huyết, mã nguồn mở và cảm hứng thiết kế của tôi.
         </p>
       </div>
@@ -30,11 +30,10 @@ const BlogList: React.FC = () => {
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat as any)}
-            className={`px-6 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-300 border ${
-              selectedCategory === cat 
-                ? 'bg-brand-primary border-brand-primary text-white shadow-lg shadow-brand-primary/20' 
+            className={`px-6 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-300 border ${selectedCategory === cat
+                ? 'bg-brand-primary border-brand-primary text-white shadow-lg shadow-brand-primary/20'
                 : 'border-white/10 bg-white/5 text-slate-500 dark:text-slate-400 hover:border-brand-primary hover:text-brand-primary'
-            }`}
+              }`}
           >
             {cat}
           </button>

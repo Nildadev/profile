@@ -38,14 +38,16 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ language, value }) => {
                 style={vscDarkPlus}
                 customStyle={{
                     margin: 0,
-                    padding: '3rem 1.5rem 1.5rem 1.5rem',
-                    fontSize: '0.9rem',
+                    padding: '2.5rem 1rem 1rem 1rem',
+                    fontSize: '0.85rem',
                     lineHeight: '1.6',
                     backgroundColor: '#0a0514',
                 }}
                 codeTagProps={{
                     style: {
                         fontFamily: 'var(--font-mono)',
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word',
                     }
                 }}
             >

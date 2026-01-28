@@ -18,22 +18,22 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
             className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
           />
         </div>
-        
-        <div className="p-10 space-y-6">
+
+        <div className="p-6 md:p-10 space-y-6">
           <div className="flex items-center gap-4">
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary">{post.category}</span>
             <span className="w-1 h-1 rounded-full bg-slate-700"></span>
             <span className="text-[10px] font-bold text-slate-500">{new Date(post.date).toLocaleDateString()}</span>
           </div>
-          
+
           <h3 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white group-hover:text-brand-primary transition-colors duration-500 leading-[1.1]">
             {post.title}
           </h3>
-          
+
           <p className="text-slate-500 dark:text-slate-400 text-sm font-medium line-clamp-2 leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
             {post.excerpt}
           </p>
-          
+
           <div className="pt-6 flex items-center justify-between">
             <div className="flex gap-2">
               {post.tags.slice(0, 2).map(tag => (

@@ -69,7 +69,7 @@ const BlogPostDetail: React.FC = () => {
           </span>
         </div>
 
-        <h1 className="text-4xl md:text-7xl font-extrabold tracking-tighter leading-[1.1] max-w-4xl mx-auto text-slate-900 dark:text-white uppercase italic">
+        <h1 className="text-3xl md:text-7xl font-extrabold tracking-tighter leading-[1.1] max-w-4xl mx-auto text-slate-900 dark:text-white uppercase italic">
           {post.title}
         </h1>
 
@@ -80,7 +80,7 @@ const BlogPostDetail: React.FC = () => {
         </div>
       </header>
 
-      <div className="relative mb-24 rounded-[48px] overflow-hidden border border-white/5 shadow-2xl animate-blur-in">
+      <div className="relative mb-12 md:mb-24 rounded-3xl md:rounded-[48px] overflow-hidden border border-white/5 shadow-2xl animate-blur-in">
         <img
           src={post.imageUrl}
           alt={post.title}
@@ -90,9 +90,9 @@ const BlogPostDetail: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 pb-40">
-        <div className="lg:col-span-8 space-y-12 animate-slide-up">
+        <div className="lg:col-span-8 space-y-8 md:space-y-12 animate-slide-up">
           <div className="prose dark:prose-invert max-w-none">
-            <p className="text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed mb-12 italic border-l-4 border-brand-primary pl-8">
+            <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed mb-8 md:mb-12 italic border-l-4 border-brand-primary pl-6 md:pl-8">
               {post.excerpt}
             </p>
 
