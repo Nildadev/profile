@@ -7,7 +7,7 @@ export class GeminiService {
       throw new Error("VITE_GEMINI_API_KEY is not defined.");
     }
     const genAI = new GoogleGenerativeAI(apiKey);
-    return genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    return genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
   }
 
   async summarizePost(title: string, content: string): Promise<string> {
