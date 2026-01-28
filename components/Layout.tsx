@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import BackgroundMusic from './BackgroundMusic';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -23,7 +24,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
       <div className="h-screen w-screen flex flex-col items-center justify-center bg-brand-dark space-y-8">
         <div className="w-20 h-20 bg-brand-primary rounded-[32px] animate-bounce flex items-center justify-center shadow-[0_0_50px_rgba(var(--color-primary-rgb),0.5)]">
-           <span className="text-white font-black text-2xl">N</span>
+          <span className="text-white font-black text-2xl">N</span>
         </div>
         <div className="space-y-2 text-center">
           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-primary animate-pulse">Initializing System</p>
@@ -49,7 +50,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               </span>
             )}
           </Link>
-          
+
           <div className="flex gap-1">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
@@ -68,7 +69,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             })}
           </div>
 
-          <button 
+          <button
             onClick={toggleTheme}
             className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors ml-4 text-slate-400 hover:text-white"
           >
@@ -78,6 +79,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
             )}
           </button>
+          <BackgroundMusic />
         </nav>
       </header>
 
@@ -115,7 +117,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></span>
             <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">
-               {isSyncing ? 'Synchronizing Cloud...' : 'System Live • Saigon'}
+              {isSyncing ? 'Synchronizing Cloud...' : 'System Live • Saigon'}
             </span>
           </div>
         </div>

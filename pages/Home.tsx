@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const Home: React.FC = () => {
   const { profile, posts } = useApp();
-  
+
   return (
     <div className="overflow-hidden">
       {/* Hero Section - Maximum Impact */}
@@ -23,14 +23,14 @@ const Home: React.FC = () => {
               Available for new projects
             </div>
           </div>
-          
+
           <h1 className="text-[clamp(3rem,10vw,8rem)] font-black tracking-[-0.05em] leading-[0.9] text-slate-900 dark:text-white uppercase">
             MAKING <br className="hidden md:block" />
             <span className="bg-gradient-to-r from-brand-primary via-brand-secondary to-brand-primary bg-clip-text text-transparent italic">SENSE</span> OF <br className="hidden md:block" />
             THE <span className="text-slate-200 dark:text-slate-800">VOID.</span>
           </h1>
 
-          <p className="max-w-2xl mx-auto text-lg md:text-xl font-medium text-slate-600 dark:text-slate-400 leading-relaxed opacity-90">
+          <p className="max-w-2xl mx-auto text-lg md:text-xl font-medium text-slate-700 dark:text-slate-300 leading-relaxed">
             Tôi là {profile.name}. Nhà phát triển sản phẩm tập trung vào sự tối giản, hiệu suất và những trải nghiệm số đầy cảm hứng.
           </p>
 
@@ -43,7 +43,7 @@ const Home: React.FC = () => {
             </Link>
           </div>
         </div>
-        
+
         {/* Floating elements */}
         <div className="absolute bottom-12 left-12 flex flex-col gap-4 text-[9px] font-black uppercase tracking-[0.5em] text-slate-400 opacity-40 hidden lg:flex">
           <p>44.837° N / -0.579° W</p>
@@ -79,15 +79,15 @@ const Home: React.FC = () => {
       <section className="max-w-screen-2xl mx-auto px-6 md:px-12 py-40 bg-slate-50 dark:bg-white/[0.02] rounded-[4rem] border border-slate-200 dark:border-white/5 mb-40">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-4 space-y-12">
-             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary">Expertise</h4>
-             <h3 className="text-5xl font-black tracking-tighter leading-[0.9] text-slate-900 dark:text-white">
-               Công nghệ <br /> định hình <br /> tương lai.
-             </h3>
-             <p className="text-slate-500 dark:text-slate-400 font-medium max-w-xs leading-relaxed">
-               Từ việc viết script tự động hóa đến xây dựng các framework web hiện đại và nghệ thuật đồ họa.
-             </p>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary">Expertise</h4>
+            <h3 className="text-5xl font-black tracking-tighter leading-[0.9] text-slate-900 dark:text-white">
+              Công nghệ <br /> định hình <br /> tương lai.
+            </h3>
+            <p className="text-slate-500 dark:text-slate-400 font-medium max-w-xs leading-relaxed">
+              Từ việc viết script tự động hóa đến xây dựng các framework web hiện đại và nghệ thuật đồ họa.
+            </p>
           </div>
-          
+
           <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-12 glass rounded-5xl bento-card space-y-8">
               <div className="w-12 h-12 bg-brand-primary/10 rounded-2xl flex items-center justify-center">
@@ -96,7 +96,7 @@ const Home: React.FC = () => {
               <h4 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Fullstack Dev</h4>
               <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Sử dụng React, Node.js và TypeScript để tạo ra các hệ thống web có khả năng mở rộng cực cao.</p>
             </div>
-            
+
             <div className="p-12 glass rounded-5xl bento-card space-y-8 bg-brand-secondary/5">
               <div className="w-12 h-12 bg-brand-secondary/10 rounded-2xl flex items-center justify-center">
                 <svg className="w-6 h-6 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
@@ -125,16 +125,16 @@ const Home: React.FC = () => {
 
       {/* Newsletter / Contact CTA */}
       <section className="max-w-screen-2xl mx-auto px-6 py-40 text-center space-y-12">
-         <h2 className="text-7xl md:text-9xl font-black tracking-tighter opacity-10 uppercase italic text-slate-900 dark:text-white">Get in touch</h2>
-         <div className="max-w-2xl mx-auto space-y-8">
-            <h3 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white">Hãy bắt đầu một cuộc hội thoại?</h3>
-            <p className="text-slate-500 dark:text-slate-400 font-medium">Gửi mail hoặc kết nối qua các nền tảng mạng xã hội để thảo luận về dự án tiếp theo của bạn.</p>
-            <div className="pt-8">
-              <a href={`mailto:${profile.socials?.email || ''}`} className="inline-flex items-center gap-4 px-12 py-6 bg-brand-primary text-white rounded-full font-black text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-brand-primary/20">
-                Gửi yêu cầu <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-              </a>
-            </div>
-         </div>
+        <h2 className="text-7xl md:text-9xl font-black tracking-tighter opacity-10 uppercase italic text-slate-900 dark:text-white">Get in touch</h2>
+        <div className="max-w-2xl mx-auto space-y-8">
+          <h3 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white">Hãy bắt đầu một cuộc hội thoại?</h3>
+          <p className="text-slate-500 dark:text-slate-400 font-medium">Gửi mail hoặc kết nối qua các nền tảng mạng xã hội để thảo luận về dự án tiếp theo của bạn.</p>
+          <div className="pt-8">
+            <a href={`mailto:${profile.socials?.email || ''}`} className="inline-flex items-center gap-4 px-12 py-6 bg-brand-primary text-white rounded-full font-black text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-brand-primary/20">
+              Gửi yêu cầu <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+            </a>
+          </div>
+        </div>
       </section>
     </div>
   );

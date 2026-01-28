@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { gemini } from '../services/geminiService';
+import ReactMarkdown from 'react-markdown';
+import CodeBlock from '../components/CodeBlock';
 
 const BlogPostDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -53,7 +55,7 @@ const BlogPostDetail: React.FC = () => {
           <span className="text-brand-primary/60 truncate max-w-[150px] md:max-w-xs">{post.title}</span>
         </nav>
 
-        <button 
+        <button
           onClick={() => navigate(-1)}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-white border-white/5 transition-all mb-4 group"
         >
@@ -93,14 +95,33 @@ const BlogPostDetail: React.FC = () => {
             <p className="text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed mb-12 italic border-l-4 border-brand-primary pl-8">
               {post.excerpt}
             </p>
-            
-            <div className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed space-y-8 whitespace-pre-wrap font-medium">
-              {post.content}
+
+            <div className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed font-medium markdown-content">
+              <ReactMarkdown
+                components={{
+                  code({ node, inline, className, children, ...props }: any) {
+                    const match = /language-(\w+)/.exec(className || '');
+                    const value = String(children).replace(/\n$/, '');
+                    return !inline && match ? (
+                      <CodeBlock
+                        language={match[1]}
+                        value={value}
+                      />
+                    ) : (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    );
+                  }
+                }}
+              >
+                {post.content}
+              </ReactMarkdown>
             </div>
 
             <div className="mt-16 flex justify-between items-center mb-4 border-t border-white/5 pt-12">
               <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary">Technical Reference</h4>
-              <button 
+              <button
                 onClick={copyToClipboard}
                 className="text-[10px] font-black uppercase tracking-widest px-4 py-2 bg-brand-primary/10 text-brand-primary border border-brand-primary/20 rounded-xl hover:bg-brand-primary hover:text-white transition-all"
               >
@@ -143,7 +164,7 @@ const BlogPostDetail: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                    
+
                     {insight && (
                       <div className="space-y-2 pt-4 border-t border-white/5">
                         <h5 className="text-[9px] font-black text-brand-secondary uppercase tracking-[0.2em]">Phân tích chuyên sâu:</h5>
@@ -155,8 +176,8 @@ const BlogPostDetail: React.FC = () => {
                       </div>
                     )}
 
-                    <button 
-                      onClick={() => setSummary(null)} 
+                    <button
+                      onClick={() => setSummary(null)}
                       className="text-[9px] text-slate-500 hover:text-brand-primary font-black uppercase tracking-widest underline decoration-2 underline-offset-4 transition-colors pt-2"
                     >
                       Yêu cầu phân tích lại
@@ -177,8 +198,8 @@ const BlogPostDetail: React.FC = () => {
               <h4 className="font-black text-sm uppercase tracking-widest text-slate-900 dark:text-white">Metadata</h4>
               <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag, idx) => (
-                  <span 
-                    key={tag} 
+                  <span
+                    key={tag}
                     className="px-4 py-2 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand-primary hover:border-brand-primary transition-all cursor-pointer"
                   >
                     #{tag}
