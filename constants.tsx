@@ -10,7 +10,7 @@ export const DEFAULT_DESIGN: DesignSettings = {
 export const USER_PROFILE: UserProfile = {
   name: "Nildadev",
   role: "Senior Fullstack Engineer & Tech Artist",
-  bio: "Chuyên gia xây dựng các hệ thống web quy mô lớn và tối ưu hóa workflow bằng AI. Tôi đam mê sự giao thoa giữa code thuần túy và nghệ thuật thị giác số.",
+  bio: "Chuyên gia xây dựng các hệ thống web quy mô lớn và tối ưu hóa workflow. Tôi đam mê sự giao thoa giữa code thuần túy và nghệ thuật thị giác số.",
   avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&h=400&auto=format&fit=crop",
   socials: {
     github: "https://github.com/Nildadev",
@@ -20,9 +20,9 @@ export const USER_PROFILE: UserProfile = {
 export const BLOG_POSTS: BlogPost[] = [
   {
     id: "1",
-    title: "Tối ưu hóa Pipeline CI/CD với AI Agents",
-    excerpt: "Cách tích hợp LLM vào quá trình kiểm thử tự động để giảm 40% thời gian phát hiện lỗi trong môi trường Production.",
-    content: "Trong kỷ nguyên của Generative AI, việc chỉ sử dụng các script truyền thống cho CI/CD đã trở nên lạc hậu. Bài viết này hướng dẫn cách xây dựng một 'Agentic Workflow' sử dụng Gemini API để phân tích log lỗi real-time.\n\n```typescript\nimport { GoogleGenAI } from \"@google/genai\";\n\nasync function analyzeLogs(logData: string) {\n    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });\n    const response = await ai.models.generateContent({\n        model: 'gemini-3-flash-preview',\n        contents: `Analyze this error: ${logData}`,\n    });\n    return response.text;\n}\n```\n\nGiải pháp này giúp đội ngũ kỹ thuật tập trung vào việc fix bug thay vì dành hàng giờ để đọc stack trace.",
+    title: "Tối ưu hóa Pipeline CI/CD thế hệ mới",
+    excerpt: "Cách tích hợp automation vào quá trình kiểm thử tự động để giảm 40% thời gian phát hiện lỗi trong môi trường Production.",
+    content: "Trong kỷ nguyên của DevOps hiện đại, việc tối ưu hóa CI/CD là bài toán sống còn. Bài viết này hướng dẫn cách xây dựng một workflow tự động hóa để phân tích log lỗi real-time.\n\n```typescript\nasync function analyzeLogs(logData: string) {\n    // Logic phân tích log tự động\n    const analysis = await parseLogs(logData);\n    return analysis.summary;\n}\n```\n\nGiải pháp này giúp đội ngũ kỹ thuật tập trung vào việc fix bug thay vì dành hàng giờ để đọc stack trace.",
     category: Category.SCRIPT,
     date: "2024-12-10",
     imageUrl: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?q=80&w=1200&auto=format&fit=crop",

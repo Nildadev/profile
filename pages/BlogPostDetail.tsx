@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import { gemini } from '../services/geminiService';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from '../components/CodeBlock';
 
@@ -10,9 +9,6 @@ const BlogPostDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { posts } = useApp();
-  const [summary, setSummary] = useState<string | null>(null);
-  const [isSummarizing, setIsSummarizing] = useState(false);
-  const [insight, setInsight] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   const post = posts.find(p => p.id === id);
@@ -22,17 +18,8 @@ const BlogPostDetail: React.FC = () => {
       navigate('/blog');
       return;
     }
-    gemini.getInsights(post.category, post.tags).then(setInsight);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [post, navigate]);
-
-  const handleGenerateSummary = async () => {
-    if (!post) return;
-    setIsSummarizing(true);
-    const res = await gemini.summarizePost(post.title, post.content);
-    setSummary(res);
-    setIsSummarizing(false);
-  };
 
   const copyToClipboard = () => {
     if (!post) return;
@@ -133,66 +120,6 @@ const BlogPostDetail: React.FC = () => {
 
         <aside className="lg:col-span-4 space-y-10">
           <div className="sticky top-32 space-y-10 animate-slide-up" style={{ animationDelay: '200ms' }}>
-            <div className="relative p-10 rounded-[40px] overflow-hidden group">
-              <div className="absolute inset-0 bg-brand-primary/5 dark:bg-brand-primary/10 backdrop-blur-3xl border border-brand-primary/20"></div>
-              <div className="relative z-10 space-y-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-brand-primary flex items-center justify-center shadow-2xl shadow-brand-primary/40">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                  </div>
-                  <div>
-                    <h4 className="font-black text-sm text-slate-900 dark:text-white tracking-tight uppercase italic">Trợ lý AI</h4>
-                    <p className="text-[9px] text-brand-primary font-black uppercase tracking-widest">Neural Analysis Engine</p>
-                  </div>
-                </div>
-
-                {!summary ? (
-                  <button
-                    onClick={handleGenerateSummary}
-                    disabled={isSummarizing}
-                    className="w-full py-5 bg-slate-900 text-white dark:bg-white dark:text-black hover:brightness-110 disabled:opacity-50 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all shadow-xl"
-                  >
-                    {isSummarizing ? 'Đang giải mã...' : 'Phân tích & Tóm tắt'}
-                  </button>
-                ) : (
-                  <div className="space-y-6">
-                    <div className="space-y-2">
-                      <h5 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Bản tóm tắt:</h5>
-                      <div className="p-6 bg-white/5 dark:bg-black/40 rounded-3xl border border-white/5">
-                        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium italic">
-                          "{summary}"
-                        </p>
-                      </div>
-                    </div>
-
-                    {insight && (
-                      <div className="space-y-2 pt-4 border-t border-white/5">
-                        <h5 className="text-[9px] font-black text-brand-secondary uppercase tracking-[0.2em]">Phân tích chuyên sâu:</h5>
-                        <div className="p-6 bg-brand-secondary/5 rounded-3xl border border-brand-secondary/10">
-                          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed italic">
-                            {insight}
-                          </p>
-                        </div>
-                      </div>
-                    )}
-
-                    <button
-                      onClick={() => setSummary(null)}
-                      className="text-[9px] text-slate-500 hover:text-brand-primary font-black uppercase tracking-widest underline decoration-2 underline-offset-4 transition-colors pt-2"
-                    >
-                      Yêu cầu phân tích lại
-                    </button>
-                  </div>
-                )}
-
-                {!summary && insight && !isSummarizing && (
-                  <div className="pt-8 border-t border-slate-200 dark:border-white/10">
-                    <h5 className="text-[9px] font-black text-brand-secondary uppercase mb-4 tracking-[0.3em]">AI Insight:</h5>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed italic">{insight}</p>
-                  </div>
-                )}
-              </div>
-            </div>
 
             <div className="p-10 glass rounded-[40px] border-white/5 space-y-8">
               <h4 className="font-black text-sm uppercase tracking-widest text-slate-900 dark:text-white">Metadata</h4>
