@@ -113,7 +113,14 @@ const BlogPostDetail: React.FC = () => {
                   h3: ({ children }) => {
                     const id = String(children).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
                     return <h3 id={id} className="scroll-mt-32 text-xl font-bold mt-8 mb-4 text-slate-800 dark:text-slate-200">{children}</h3>;
-                  }
+                  },
+                  img: ({ node, ...props }: any) => (
+                    <img
+                      className="rounded-2xl border border-white/10 shadow-xl my-8 mx-auto max-h-[600px] object-cover"
+                      loading="lazy"
+                      {...props}
+                    />
+                  )
                 }}
               >
                 {post.content}

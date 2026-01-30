@@ -27,6 +27,7 @@ const EditorModal: React.FC<EditorModalProps> = ({ isOpen, onClose }) => {
 
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const postImageInputRef = useRef<HTMLInputElement>(null);
+  const contentImageInputRef = useRef<HTMLInputElement>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
 
   const [profileForm, setProfileForm] = useState(profile);
@@ -295,13 +296,29 @@ const EditorModal: React.FC<EditorModalProps> = ({ isOpen, onClose }) => {
                           { label: 'B', action: '**nguồn**', tooltip: 'In đậm' },
                           { label: 'I', action: '*nghiêng*', tooltip: 'In nghiêng' },
                           { label: 'Link', action: '[text](url)', tooltip: 'Chèn liên kết' },
-                          { label: 'Img', action: '![alt](url)', tooltip: 'Chèn hình ảnh' },
+                          {
+                            label: 'Img',
+                            action: '![alt](url)',
+                            tooltip: 'Chèn hình ảnh từ URL',
+                            onClick: () => {
+                              const url = prompt('Nhập URL hình ảnh:');
+                              if (url) {
+                                setEditingPost({ ...editingPost, content: (editingPost.content || '') + `\n![image](${url})\n` });
+                              }
+                            }
+                          },
+                          {
+                            label: 'Upload',
+                            action: '',
+                            tooltip: 'Tải ảnh lên (Base64)',
+                            onClick: () => contentImageInputRef.current?.click()
+                          },
                           { label: 'Code', action: '```\ncode\n```', tooltip: 'Chèn mã nguồn' },
                         ].map(tool => (
                           <button
                             key={tool.label}
                             type="button"
-                            onClick={() => setEditingPost({ ...editingPost, content: (editingPost.content || '') + tool.action })}
+                            onClick={tool.onClick || (() => setEditingPost({ ...editingPost, content: (editingPost.content || '') + tool.action }))}
                             className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs text-slate-400 hover:text-white hover:bg-white/10 hover:border-brand-primary transition-all font-mono"
                             title={tool.tooltip}
                           >
@@ -310,6 +327,28 @@ const EditorModal: React.FC<EditorModalProps> = ({ isOpen, onClose }) => {
                         ))}
                       </div>
                     )}
+
+                    <input
+                      type="file"
+                      ref={contentImageInputRef}
+                      className="hidden"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          if (file.size > 1024 * 1024) {
+                            alert('Ảnh quá lớn (>1MB). Hãy nén ảnh trước khi tải lên để tránh lỗi bộ nhớ.');
+                            return;
+                          }
+                          const reader = new FileReader();
+                          reader.onload = (ev) => {
+                            const base64 = ev.target?.result as string;
+                            setEditingPost({ ...editingPost, content: (editingPost.content || '') + `\n![image](${base64})\n` });
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
 
                     {showPreview ? (
                       <div className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-6 text-slate-300 min-h-[300px] prose dark:prose-invert max-w-none">
