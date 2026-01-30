@@ -5,6 +5,8 @@ import { Category, BlogPost, DesignSettings } from '../types';
 import { DEFAULT_DESIGN } from '../constants';
 import { cloudService } from '../services/cloudService';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import CodeBlock from './CodeBlock';
 
 interface EditorModalProps {
@@ -291,40 +293,85 @@ const EditorModal: React.FC<EditorModalProps> = ({ isOpen, onClose }) => {
                     </div>
 
                     {!showPreview && (
-                      <div className="flex gap-2 pb-2">
-                        {[
-                          { label: 'B', action: '**nguồn**', tooltip: 'In đậm' },
-                          { label: 'I', action: '*nghiêng*', tooltip: 'In nghiêng' },
-                          { label: 'Link', action: '[text](url)', tooltip: 'Chèn liên kết' },
-                          {
-                            label: 'Img',
-                            action: '![alt](url)',
-                            tooltip: 'Chèn hình ảnh từ URL',
-                            onClick: () => {
-                              const url = prompt('Nhập URL hình ảnh:');
-                              if (url) {
-                                setEditingPost({ ...editingPost, content: (editingPost.content || '') + `\n![image](${url})\n` });
-                              }
-                            }
-                          },
-                          {
-                            label: 'Upload',
-                            action: '',
-                            tooltip: 'Tải ảnh lên (Base64)',
-                            onClick: () => contentImageInputRef.current?.click()
-                          },
-                          { label: 'Code', action: '```\ncode\n```', tooltip: 'Chèn mã nguồn' },
-                        ].map(tool => (
-                          <button
-                            key={tool.label}
-                            type="button"
-                            onClick={tool.onClick || (() => setEditingPost({ ...editingPost, content: (editingPost.content || '') + tool.action }))}
-                            className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs text-slate-400 hover:text-white hover:bg-white/10 hover:border-brand-primary transition-all font-mono"
-                            title={tool.tooltip}
-                          >
-                            {tool.label}
-                          </button>
-                        ))}
+                      <div className="space-y-4 pb-4">
+                        {/* Toolbar */}
+                        <div className="flex flex-wrap gap-2">
+                          {[
+                            { label: 'B', action: '**văn bản**', tooltip: 'In đậm' },
+                            { label: 'I', action: '*văn bản*', tooltip: 'In nghiêng' },
+                            { label: 'Link', action: '[tiêu đề](https://example.com)', tooltip: 'Chèn liên kết' },
+                            { label: 'Code', action: '```javascript\n// code here\n```', tooltip: 'Chèn mã nguồn' },
+                            { label: 'H2', action: '\n## Tiêu đề phụ\n', tooltip: 'Tiêu đề cấp 2' },
+                            { label: 'H3', action: '\n### Tiêu đề nhỏ\n', tooltip: 'Tiêu đề cấp 3' },
+                          ].map(tool => (
+                            <button
+                              key={tool.label}
+                              type="button"
+                              onClick={() => setEditingPost({ ...editingPost, content: (editingPost.content || '') + tool.action })}
+                              className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs text-slate-400 hover:text-white hover:bg-white/10 hover:border-brand-primary transition-all font-mono"
+                              title={tool.tooltip}
+                            >
+                              {tool.label}
+                            </button>
+                          ))}
+                        </div>
+
+                        {/* Image Insertion Panel */}
+                        <div className="p-4 bg-brand-primary/5 border border-brand-primary/20 rounded-2xl space-y-4">
+                          <div className="flex items-center gap-2">
+                            <svg className="w-5 h-5 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            <h5 className="text-sm font-black uppercase tracking-widest text-brand-primary">Chèn hình ảnh</h5>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* URL Input */}
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Từ URL (Unsplash, Imgur, ...)</label>
+                              <div className="flex gap-2">
+                                <input
+                                  type="url"
+                                  id="image-url-input"
+                                  placeholder="https://example.com/image.jpg"
+                                  className="flex-1 bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-brand-primary outline-none"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const input = document.getElementById('image-url-input') as HTMLInputElement;
+                                    const url = input?.value?.trim();
+                                    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+                                      setEditingPost({ ...editingPost, content: (editingPost.content || '') + `\n\n![Hình ảnh](${url})\n\n` });
+                                      input.value = '';
+                                      alert('✅ Đã chèn ảnh thành công! Bấm "Xem trước" để kiểm tra.');
+                                    } else {
+                                      alert('⚠️ URL không hợp lệ. Hãy nhập đường dẫn bắt đầu bằng http:// hoặc https://');
+                                    }
+                                  }}
+                                  className="px-4 py-2 bg-brand-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all"
+                                >
+                                  Chèn
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* File Upload */}
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Tải từ máy tính</label>
+                              <div className="flex gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => contentImageInputRef.current?.click()}
+                                  className="flex-1 py-3 bg-white/5 border-2 border-dashed border-white/20 rounded-xl text-sm text-slate-400 hover:border-brand-primary hover:text-brand-primary transition-all flex items-center justify-center gap-2"
+                                >
+                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                  Chọn ảnh (tối đa 500KB)
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                          <p className="text-[10px] text-slate-500 italic">💡 Mẹo: Dùng Unsplash hoặc Imgur để lưu trữ ảnh miễn phí và lấy URL.</p>
+                        </div>
                       </div>
                     )}
 
@@ -336,32 +383,50 @@ const EditorModal: React.FC<EditorModalProps> = ({ isOpen, onClose }) => {
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) {
-                          if (file.size > 1024 * 1024) {
-                            alert('Ảnh quá lớn (>1MB). Hãy nén ảnh trước khi tải lên để tránh lỗi bộ nhớ.');
+                          if (file.size > 500 * 1024) {
+                            alert('⚠️ Ảnh quá lớn (>500KB). Hãy nén ảnh hoặc dùng URL từ Unsplash/Imgur.');
                             return;
                           }
                           const reader = new FileReader();
                           reader.onload = (ev) => {
                             const base64 = ev.target?.result as string;
-                            setEditingPost({ ...editingPost, content: (editingPost.content || '') + `\n![image](${base64})\n` });
+                            setEditingPost({ ...editingPost, content: (editingPost.content || '') + `\n\n![Hình ảnh](${base64})\n\n` });
+                            alert('✅ Đã chèn ảnh thành công! Bấm "Xem trước" để kiểm tra.');
                           };
                           reader.readAsDataURL(file);
                         }
                       }}
                     />
 
+
                     {showPreview ? (
                       <div className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-6 text-slate-300 min-h-[300px] prose dark:prose-invert max-w-none">
-                        <ReactMarkdown components={{
-                          code({ node, inline, className, children, ...props }: any) {
-                            const match = /language-(\w+)/.exec(className || '');
-                            return !inline && match ? (
-                              <CodeBlock language={match[1]} value={String(children).replace(/\n$/, '')} />
-                            ) : (
-                              <code className={className} {...props}>{children}</code>
-                            );
-                          }
-                        }}>
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          rehypePlugins={[rehypeRaw]}
+                          components={{
+                            code({ node, inline, className, children, ...props }: any) {
+                              const match = /language-(\w+)/.exec(className || '');
+                              return !inline && match ? (
+                                <CodeBlock language={match[1]} value={String(children).replace(/\n$/, '')} />
+                              ) : (
+                                <code className={className} {...props}>{children}</code>
+                              );
+                            },
+                            img: ({ node, ...props }: any) => (
+                              <div className="my-6">
+                                <img
+                                  className="rounded-xl border border-white/10 shadow-lg mx-auto max-w-full h-auto"
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src = 'https://placehold.co/600x400/0f172a/0ea5e9?text=Preview+Image+Not+Found';
+                                  }}
+                                  {...props}
+                                />
+                              </div>
+                            )
+                          }}
+                        >
                           {editingPost.content || '*Chưa có nội dung*'}
                         </ReactMarkdown>
                       </div>

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import CodeBlock from '../components/CodeBlock';
 import TableOfContents from '../components/TableOfContents';
 import BlogCard from '../components/BlogCard';
@@ -91,6 +93,8 @@ const BlogPostDetail: React.FC = () => {
 
             <div className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed font-medium markdown-content">
               <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
                 components={{
                   code({ node, inline, className, children, ...props }: any) {
                     const match = /language-(\w+)/.exec(className || '');
@@ -115,11 +119,24 @@ const BlogPostDetail: React.FC = () => {
                     return <h3 id={id} className="scroll-mt-32 text-xl font-bold mt-8 mb-4 text-slate-800 dark:text-slate-200">{children}</h3>;
                   },
                   img: ({ node, ...props }: any) => (
-                    <img
-                      className="rounded-2xl border border-white/10 shadow-xl my-8 mx-auto max-h-[600px] object-cover"
-                      loading="lazy"
-                      {...props}
-                    />
+                    <div className="my-10 space-y-2">
+                      <img
+                        className="rounded-3xl border border-white/10 shadow-2xl mx-auto max-w-full h-auto object-contain cursor-zoom-in hover:scale-[1.02] transition-transform"
+                        loading="lazy"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = 'https://placehold.co/600x400/0f172a/0ea5e9?text=Image+Not+Found';
+                          const container = target.parentElement;
+                          if (container) {
+                            const errorText = document.createElement('p');
+                            errorText.className = 'text-[10px] text-red-400 font-black uppercase tracking-widest text-center mt-4';
+                            errorText.innerText = '⚠️ KHÔNG TÌM THẤY ẢNH - HÃY KIỂM TRA LẠI ĐƯỜNG DẪN';
+                            container.appendChild(errorText);
+                          }
+                        }}
+                        {...props}
+                      />
+                    </div>
                   )
                 }}
               >
