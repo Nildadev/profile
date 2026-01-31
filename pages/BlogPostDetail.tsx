@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import ReactMarkdown from 'react-markdown';
@@ -14,19 +14,42 @@ const BlogPostDetail: React.FC = () => {
   const { posts } = useApp();
   const [copied, setCopied] = useState(false);
   const [readingProgress, setReadingProgress] = useState(0);
+  const requestRef = useRef<number | undefined>(undefined);
+  const previousProgress = useRef<number>(0);
 
   const post = posts.find(p => p.id === id);
 
   useEffect(() => {
+    let ticking = false;
+
     const updateReadingProgress = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = (scrollTop / docHeight) * 100;
-      setReadingProgress(Math.min(Math.max(progress, 0), 100));
+      const clampedProgress = Math.min(Math.max(progress, 0), 100);
+
+      if (Math.abs(clampedProgress - previousProgress.current) > 0.5) {
+        setReadingProgress(clampedProgress);
+        previousProgress.current = clampedProgress;
+      }
+
+      ticking = false;
     };
 
-    window.addEventListener('scroll', updateReadingProgress);
-    return () => window.removeEventListener('scroll', updateReadingProgress);
+    const onScroll = () => {
+      if (!ticking) {
+        requestRef.current = requestAnimationFrame(updateReadingProgress);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (requestRef.current !== undefined) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, []);
 
   // Related Posts Logic
